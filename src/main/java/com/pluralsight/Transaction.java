@@ -9,6 +9,7 @@ import java.sql.Array;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -89,12 +90,12 @@ public class Transaction {
 
             while ((Line = br1.readLine()) != null) {
                 String[] split = Line.split("[|]");
-                LocalDate date = LocalDate.parse(split[0]);
-                LocalTime time = LocalTime.parse(split[1]);
-                String description = split[2];
-                String vendor = split[3];
-                double amount = Double.parseDouble(split[4]);
-                double balance = Double.parseDouble(split[5]);
+                LocalDate date = LocalDate.parse(split[0].trim());
+                LocalTime time = LocalTime.parse(split[1].trim());
+                String description = split[2].trim();
+                String vendor = split[3].trim();
+                double amount = Double.parseDouble(split[4].trim());
+                double balance = Double.parseDouble(split[5].trim());
 
                 Transaction transaction = new Transaction(date, time, description, vendor, amount, balance);
                 transactions.computeIfAbsent(date, (LocalDate k) -> new ArrayList<>()).add(transaction);
@@ -169,7 +170,42 @@ public class Transaction {
             writeTransaction(transaction);
         }
     }
+    public static void readAllTransactions(){
+        HashMap<LocalDate, List<Transaction>> transactions = readTransactions();
 
+        List<LocalDate> sortedDates = new ArrayList<>(transactions.keySet());
+        Collections.sort(sortedDates);
+
+        for (LocalDate date : sortedDates)   {
+            for (Transaction t : transactions.get(date)) {
+                System.out.printf("%s   |   %s   |   %s   |   %s   |   %.2f   |   %.2f%n",
+                        t.getDate(),
+                        t.getTime(),
+                        t.getDescription(),
+                        t.getVendor(),
+                        t.getAmount(),
+                        t.getBalance());
+            }
+
+        }
+    }
+    public static void readDeposits(){
+        HashMap<LocalDate, List<Transaction>> transactions = readTransactions();
+
+        for (List<Transaction> transactionList : transactions.values()) {
+            for (Transaction t : transactionList ) {
+                if (t.getAmount() > 0) {
+                    System.out.printf("%s   |   %s   |   %s   |   %s   |   %.2f   |   %.2f%n",
+                            t.getDate(),
+                            t.getTime(),
+                            t.getDescription(),
+                            t.getVendor(),
+                            t.getAmount(),
+                            t.getBalance());
+                }
+            }
+        }
+    }
 }
 
 

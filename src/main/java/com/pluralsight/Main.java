@@ -12,7 +12,6 @@ public class Main {
         showHomeScreen();
 
 
-
         HashMap<LocalDate, List<Transaction>> readTransactions = Transaction.readTransactions();
         for (LocalDate date : readTransactions.keySet()) {
             for (Transaction t : readTransactions.get(date)){
@@ -43,6 +42,28 @@ public class Main {
                 case "P":
                     Transaction.paymentTransactions();
                     break;
+                case "L":
+                    String ledgerChoice;
+                    do {
+                        ledgerChoice = Console.promptForString(
+                                "=== Menu Options === \n" +
+                                        "A) All -- Get All Transactions \n" +
+                                        "D) Deposit -- Get all deposit transactions \n" +
+                                        "P) Payments -- Get all payment transactions\n" +
+                                        "R) Report -- Create a report \n" +
+                                        "H) To go back \n" +
+                                        "Enter Your Command\n"
+                        ).toUpperCase();
+                        switch(ledgerChoice) {
+                            case "A":
+                                Transaction.readAllTransactions();
+                            case "D":
+                                Transaction.readDeposits();
+                            default:
+                                System.out.println("Invalid choice! Please try again.");
+
+                        }
+                    }while (!ledgerChoice.equals("H"));
                 default:
                     System.out.println("Invalid choice! Please try again.");
             }
