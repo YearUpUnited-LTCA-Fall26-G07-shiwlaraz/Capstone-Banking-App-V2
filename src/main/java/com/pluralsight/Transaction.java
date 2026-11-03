@@ -149,7 +149,8 @@ public class Transaction {
         if (amount <= 0) {
             System.out.println("Amount Must Be Greater Than 0");
         } else {
-            Transaction transaction = new Transaction(LocalDate.now(), LocalTime.now(), description, vendor, amount, balance + amount);
+            Transaction transaction = new Transaction(LocalDate.now(), LocalTime.now(),
+                    description, vendor, amount, balance + amount);
             writeTransaction(transaction);
         }
 
@@ -166,7 +167,8 @@ public class Transaction {
             System.out.println("Insufficient balance!");
         }
         else {
-            Transaction transaction = new Transaction(LocalDate.now(), LocalTime.now(), description, vendor, -amount, balance - amount);
+            Transaction transaction = new Transaction(LocalDate.now(), LocalTime.now(),
+                    description, vendor, -amount, balance - amount);
             writeTransaction(transaction);
         }
     }
@@ -205,6 +207,67 @@ public class Transaction {
                 }
             }
         }
+    }
+    public static void readPayments() {
+        HashMap<LocalDate, List<Transaction>> transactions = readTransactions();
+
+        for (List<Transaction> transactionList : transactions.values()) {
+            for (Transaction t : transactionList ) {
+                if (t.getAmount() < 0) {
+                    System.out.printf("%s   |   %s   |   %s   |   %s   |   %.2f   |   %.2f%n",
+                            t.getDate(),
+                            t.getTime(),
+                            t.getDescription(),
+                            t.getVendor(),
+                            t.getAmount(),
+                            t.getBalance());
+
+                }
+            }
+        }
+    }
+    public static void reportMonthToDate(){
+        HashMap<LocalDate, List<Transaction>> transactions =readTransactions();
+
+        LocalDate startDate = LocalDate.now().withDayOfMonth(0);
+        LocalDate endDate =  LocalDate.now();
+
+        for (LocalDate date : transactions.keySet()) {
+            for (Transaction t : transactions.get(date)) {
+                if (!date.isBefore(startDate) && !date.isAfter(endDate) ) {
+                    System.out.printf("%s   |   %s   |   %s   |   %s   |   %.2f   |   %.2f%n",
+                            t.getDate(),
+                            t.getTime(),
+                            t.getDescription(),
+                            t.getVendor(),
+                            t.getAmount(),
+                            t.getBalance());
+                }
+
+            }
+        }
+
+    }
+    public static void reportOfPreviousMonth() {
+        HashMap<LocalDate, List<Transaction>> transactions = readTransactions();
+
+        LocalDate startDate = LocalDate.now().minusMonths(1).withDayOfMonth(1);
+        LocalDate endDate = LocalDate.now().withDayOfMonth(1).minusDays(1);
+
+        for (LocalDate date : transactions.keySet()) {
+            for (Transaction t : transactions.get(date)) {
+                if (!date.isBefore(startDate) && !date.isAfter(endDate)) {
+                    System.out.printf("%s   |   %s   |   %s   |   %s   |   %.2f   |   %.2f%n",
+                            t.getDate(),
+                            t.getTime(),
+                            t.getDescription(),
+                            t.getVendor(),
+                            t.getAmount(),
+                            t.getBalance());
+                }
+            }
+        }
+
     }
 }
 

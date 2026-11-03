@@ -31,7 +31,7 @@ public class Main {
                 "P) Make Payment (Debit) \n" +
                 "L) Ledger \n" +
                 "X) Exit \n" +
-                "Enter Your Command";
+                "Enter Your Command: ";
         String choice;
         do {
             choice = Console.promptForString(mainMenuTexts).toUpperCase();
@@ -52,16 +52,40 @@ public class Main {
                                         "P) Payments -- Get all payment transactions\n" +
                                         "R) Report -- Create a report \n" +
                                         "H) To go back \n" +
-                                        "Enter Your Command\n"
+                                        "Enter Your Command: "
                         ).toUpperCase();
                         switch(ledgerChoice) {
                             case "A":
                                 Transaction.readAllTransactions();
                             case "D":
                                 Transaction.readDeposits();
+                            case "P":
+                                Transaction.readPayments();
+                            case "R":
+                                int reportChoice;
+                                do {
+                                    reportChoice = Console.promptForInt(
+                                            "=== Reports Menu === \n" +
+                                                    "1) Generate report of -- Month To Date -- \n" +
+                                                    "2) Generate report of -- Previous Month -- \n" +
+                                                    "3) Generate report of -- Year To Date -- \n" +
+                                                    "4) Generate report of -- Previous Year --  \n" +
+                                                    "5) Generate report by -- Search By The Vendor -- \n" +
+                                                    "0) Enter -- 0 -- Back \n" +
+                                                    "Enter Your Command: ");
+                                    switch(reportChoice) {
+                                        case 1:
+                                            Transaction.reportMonthToDate();
+                                        case 2:
+                                            Transaction.reportOfPreviousMonth();
+
+
+
+                                    }
+                                } while ( reportChoice != 0);
+
                             default:
                                 System.out.println("Invalid choice! Please try again.");
-
                         }
                     }while (!ledgerChoice.equals("H"));
                 default:
