@@ -8,10 +8,7 @@ import java.nio.Buffer;
 import java.sql.Array;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class Transaction {
     private LocalDate date;
@@ -177,9 +174,11 @@ public class Transaction {
         HashMap<LocalDate, List<Transaction>> transactions = readTransactions();
 
         List<LocalDate> sortedDates = new ArrayList<>(transactions.keySet());
-        Collections.sort(sortedDates);
+        Collections.sort(sortedDates, Collections.reverseOrder());
 
         for (LocalDate date : sortedDates)   {
+            transactions.get(date).sort(Comparator.comparing(Transaction::getTime).reversed());
+
             for (Transaction t : transactions.get(date)) {
                 System.out.printf("%s   |   %s   |   %s   |   %s   |   %.2f   |   %.2f%n",
                         t.getDate(),
@@ -195,42 +194,56 @@ public class Transaction {
     public static void readDeposits(){
         HashMap<LocalDate, List<Transaction>> transactions = readTransactions();
 
+        List<Transaction> deposits = new ArrayList<>();
+
         for (List<Transaction> transactionList : transactions.values()) {
             for (Transaction t : transactionList ) {
                 if (t.getAmount() > 0) {
-                    System.out.printf("%s   |   %s   |   %s   |   %s   |   %.2f   |   %.2f%n",
-                            t.getDate(),
-                            t.getTime(),
-                            t.getDescription(),
-                            t.getVendor(),
-                            t.getAmount(),
-                            t.getBalance());
+                    deposits.add(t);
                 }
             }
+        }
+        deposits.sort(Comparator.comparing(Transaction::getDate)
+                .thenComparing(Transaction::getTime).reversed());
+        for (Transaction d : deposits) {
+            System.out.printf("%s   |   %s   |   %s   |   %s   |   %.2f   |   %.2f%n",
+                    d.getDate(),
+                    d.getTime(),
+                    d.getDescription(),
+                    d.getVendor(),
+                    d.getAmount(),
+                    d.getBalance());
         }
     }
     public static void readPayments() {
         HashMap<LocalDate, List<Transaction>> transactions = readTransactions();
 
+        List<Transaction> payments = new ArrayList<>();
+
         for (List<Transaction> transactionList : transactions.values()) {
             for (Transaction t : transactionList ) {
                 if (t.getAmount() < 0) {
-                    System.out.printf("%s   |   %s   |   %s   |   %s   |   %.2f   |   %.2f%n",
-                            t.getDate(),
-                            t.getTime(),
-                            t.getDescription(),
-                            t.getVendor(),
-                            t.getAmount(),
-                            t.getBalance());
+                    payments.add(t);
 
                 }
             }
+        }
+        payments.sort(Comparator.comparing(Transaction::getDate)
+                .thenComparing(Transaction::getTime).reversed());
+        for (Transaction t : payments) {
+            System.out.printf("%s   |   %s   |   %s   |   %s   |   %.2f   |   %.2f%n",
+                    t.getDate(),
+                    t.getTime(),
+                    t.getDescription(),
+                    t.getVendor(),
+                    t.getAmount(),
+                    t.getBalance());
         }
     }
     public static void reportMonthToDate(){
         HashMap<LocalDate, List<Transaction>> transactions =readTransactions();
 
-        LocalDate startDate = LocalDate.now().withDayOfMonth(0);
+        LocalDate startDate = LocalDate.now().withDayOfMonth(1);
         LocalDate endDate =  LocalDate.now();
 
         for (LocalDate date : transactions.keySet()) {

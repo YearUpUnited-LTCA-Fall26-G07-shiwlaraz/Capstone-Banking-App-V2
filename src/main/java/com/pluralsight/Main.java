@@ -13,7 +13,7 @@ public class Main {
 
 
         HashMap<LocalDate, List<Transaction>> readTransactions = Transaction.readTransactions();
-        for (LocalDate date : readTransactions.keySet()) {
+/*        for (LocalDate date : readTransactions.keySet()) {
             for (Transaction t : readTransactions.get(date)){
                 System.out.printf("%s   |   %s   |   %s   |   %s   |   %.2f   |   %.2f%n",
                         t.getDate(),
@@ -23,7 +23,7 @@ public class Main {
                         t.getAmount(),
                         t.getBalance());
             }
-        }
+        }*/
     }
     public static void showHomeScreen(){
         String mainMenuTexts = "=== Manu Options ===\n" +
@@ -57,10 +57,13 @@ public class Main {
                         switch(ledgerChoice) {
                             case "A":
                                 Transaction.readAllTransactions();
+                                break;
                             case "D":
                                 Transaction.readDeposits();
+                                break;
                             case "P":
                                 Transaction.readPayments();
+                                break;
                             case "R":
                                 int reportChoice;
                                 do {
@@ -89,15 +92,22 @@ public class Main {
                                         case 5:
                                             Transaction.reportByVendor();
                                             break;
+                                        case 0:
+                                            break;
                                         default:
                                             System.out.println("Invalid choice! Please try again.");
                                     }
-                                } while ( reportChoice != 0);
-
+                                }while (reportChoice != 0);
+                                break;
+                            case "H":
+                                break;
                             default:
                                 System.out.println("Invalid choice! Please try again.");
                         }
                     }while (!ledgerChoice.equals("H"));
+                    break;
+                case "X":
+                    break;
                 default:
                     System.out.println("Invalid choice! Please try again.");
             }
