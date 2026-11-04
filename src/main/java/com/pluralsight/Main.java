@@ -27,10 +27,10 @@ public class Main {
     }
     public static void showHomeScreen(){
         String mainMenuTexts = "=== Manu Options ===\n" +
-                "D) Add Deposit \n" +
-                "P) Make Payment (Debit) \n" +
-                "L) Ledger \n" +
-                "X) Exit \n" +
+                "D) Enter (D) To Add Deposit \n" +
+                "P) Enter (P) Make Payment (Debit) \n" +
+                "L) Enter (L) Ledger To Check Ledger \n" +
+                "X) Enter (X) To Exit  \n" +
                 "Enter Your Command: ";
         String choice;
         do {
@@ -76,11 +76,21 @@ public class Main {
                                     switch(reportChoice) {
                                         case 1:
                                             Transaction.reportMonthToDate();
+                                            break;
                                         case 2:
                                             Transaction.reportOfPreviousMonth();
-
-
-
+                                            break;
+                                        case 3:
+                                            Transaction.reportByYearToDate();
+                                            break;
+                                        case 4:
+                                            Transaction.reportByPreviousYear();
+                                            break;
+                                        case 5:
+                                            Transaction.reportByVendor();
+                                            break;
+                                        default:
+                                            System.out.println("Invalid choice! Please try again.");
                                     }
                                 } while ( reportChoice != 0);
 

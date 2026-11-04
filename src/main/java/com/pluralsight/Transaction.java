@@ -143,7 +143,7 @@ public class Transaction {
     public static void addDeposit() {
         String description = Console.promptForString("Enter Description");
         String vendor = Console.promptForString("Enter vendor Name");
-        String doubleAmount = Console.promptForString("Enter Depoit Amount");
+        String doubleAmount = Console.promptForString("Enter Deposit Amount");
         double amount = Double.parseDouble(doubleAmount);
         double balance = getLastBalance();
         if (amount <= 0) {
@@ -158,13 +158,14 @@ public class Transaction {
     public static void paymentTransactions(){
         String description = Console.promptForString("Enter Description");
         String vendor = Console.promptForString("Enter vendor Name");
-        String doubleAmount = Console.promptForString("Enter Depoit Amount");
+        String doubleAmount = Console.promptForString("Enter Deposit Amount");
         double amount =Double.parseDouble(doubleAmount);
         double balance = getLastBalance();
         if (amount <= 0) {
-            System.out.println("Amount Must Be less then Current Balance");
+            System.out.println("Amount Must Be less greater than 0");
         } else if (amount > balance) {
-            System.out.println("Insufficient balance!");
+            System.out.println("Amount Must Be Should not cross your current balance");
+            System.out.println("Insufficient balance!" + getLastBalance());
         }
         else {
             Transaction transaction = new Transaction(LocalDate.now(), LocalTime.now(),
@@ -265,6 +266,67 @@ public class Transaction {
                             t.getAmount(),
                             t.getBalance());
                 }
+            }
+        }
+
+    }
+    public static void reportByYearToDate() {
+        HashMap<LocalDate, List<Transaction>> transactions = readTransactions();
+
+        LocalDate startDate = LocalDate.now().withMonth(1).withDayOfMonth(1);
+        LocalDate endDate = LocalDate.now();
+
+        for (LocalDate date : transactions.keySet()) {
+            for (Transaction t : transactions.get(date)) {
+                if (!date.isBefore(startDate) && !date.isAfter(endDate)) {
+                    System.out.printf("%s   |   %s   |   %s   |   %s   |   %.2f   |   %.2f%n",
+                            t.getDate(),
+                            t.getTime(),
+                            t.getDescription(),
+                            t.getVendor(),
+                            t.getAmount(),
+                            t.getBalance());
+                }
+            }
+        }
+    }
+    public static void reportByPreviousYear() {
+        HashMap<LocalDate, List<Transaction>> transactions = readTransactions();
+
+        LocalDate startDate = LocalDate.now().minusYears(1).withMonth(1).withDayOfMonth(1);
+        LocalDate endDate = LocalDate.now().withMonth(1).minusDays(1);
+
+        for (LocalDate date : transactions.keySet()) {
+            for (Transaction t : transactions.get(date)) {
+                if (!date.isBefore(startDate) && !date.isAfter(endDate)) {
+                    System.out.printf("%s   |   %s   |   %s   |   %s   |   %.2f   |   %.2f%n",
+                            t.getDate(),
+                            t.getTime(),
+                            t.getDescription(),
+                            t.getVendor(),
+                            t.getAmount(),
+                            t.getBalance());
+                }
+            }
+        }
+    }
+    public static void reportByVendor() {
+        String vendor = Console.promptForString("Enter The name of the vendor");
+
+        HashMap<LocalDate, List<Transaction>> transactions = readTransactions();
+
+        for (List<Transaction> transactionList : transactions.values()){
+            for (Transaction t: transactionList) {
+                if (t.getVendor().equalsIgnoreCase(vendor)) {
+                    System.out.printf("%s   |   %s   |   %s   |   %s   |   %.2f   |   %.2f%n",
+                            t.getDate(),
+                            t.getTime(),
+                            t.getDescription(),
+                            t.getVendor(),
+                            t.getAmount(),
+                            t.getBalance());
+                }
+
             }
         }
 
