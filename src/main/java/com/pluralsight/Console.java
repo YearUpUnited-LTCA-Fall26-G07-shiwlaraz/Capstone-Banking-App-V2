@@ -25,6 +25,19 @@ public class Console {
             }
         }
     }
+    public static double promptForDouble(double prompt){
+        while(true) {
+            try {
+                System.out.print(prompt);
+                double result = myScanner.nextDouble();
+                return result;
+            } catch (Exception var3) {
+                System.out.print("Invalid input, Please enter a number");
+                myScanner.nextLine();
+            }
+        }
+
+    }
     static {
         myScanner = new Scanner(System.in);
     }
